@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">InventoryApp</string>
+    <string name="title_activity_second">SecondActivity</string>
+    <string name="title_activity_categories_list">CategoriesList</string>
+    <string name="title_activity_category_item">CategoryItem</string>
+    <string name="title_activity_items_list">ItemsList</string>
+    <string name="title_activity_item_details">ItemDetails</string>
+</resources>
