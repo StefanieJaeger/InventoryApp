@@ -1,4 +1,4 @@
-package com.ost.mge.inventoryapp.categories
+package com.ost.mge.inventoryapp.items
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -12,17 +12,18 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.ost.mge.inventoryapp.data.Item
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun ItemsView(navController: NavController, categoryId: String) {
+fun ItemView(navController: NavController, item: Item) {
     Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "ITEMS for $categoryId") }, navigationIcon = {
+        TopAppBar(title = { Text(text = item.name) }, navigationIcon = {
             IconButton(onClick = navController::navigateUp) {
                 Icon(Icons.Default.ArrowBack, "back")
             }
         })
     }) { padding ->
-        Text(text = "Salut", Modifier.padding(padding))
+        Text(text = "This is item ${item.name}", Modifier.padding(padding))
     }
 }
