@@ -1,6 +1,9 @@
 # InventoryApp
 
 ## Functionality
+InventoryApp is the app for all your inventory desires.
+With a free form category feature, you are no longer limited to fixed fields.
+Keep track of your inventories by category, with a base set of fields and the option to extend them with what you need.
 
 - Free form categories
 - Items per category
@@ -9,6 +12,11 @@
 - Tags with suggestions (based on previously entered data) for items
 
 ## Points
+### Mindestpunktzahl abh. von Gruppengrösse
+- 1 Person = 7 Punkte
+- 2 Personen = 13 Punkte
+- 3 Personen = 18 Punkte
+- 4 Personen = 22 Punkte
 
 |Feature|Points|Notes|
 |---|---|---|
