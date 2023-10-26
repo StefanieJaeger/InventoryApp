@@ -24,11 +24,13 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -69,9 +71,16 @@ enum class DragAnchors {
     val searchState = remember { mutableStateOf(TextFieldValue("")) }
     val filteredCategories = if(searchState.value.text.isEmpty()) categories else ArrayList();
 
-    Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "Categories") })
-    })  { padding ->
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(text = "Categories") })
+        },
+        floatingActionButton = {
+            FloatingActionButton(onClick = {  }) {
+                Icon(Icons.Filled.Add, "Add a category")
+            }
+        }
+        )  { padding ->
         Column(Modifier.padding(padding)) {
             SearchView(searchState)
             LazyColumn {
@@ -188,7 +197,7 @@ fun EditAction(modifier: Modifier) {
                     .padding(horizontal = 20.dp)
                     .size(22.dp),
                 imageVector = Icons.Filled.Edit,
-                contentDescription = null,
+                contentDescription = "Edit category",
                 tint = Color.White
             )
 
@@ -217,7 +226,7 @@ fun DeleteAction(modifier: Modifier) {
                     .padding(horizontal = 20.dp)
                     .size(22.dp),
                 imageVector = Icons.Filled.Delete,
-                contentDescription = null,
+                contentDescription = "Delete category",
                 tint = Color.White
             )
 
@@ -242,7 +251,7 @@ fun SearchView(searchState: MutableState<TextFieldValue>) {
         leadingIcon = {
             Icon(
                 Icons.Default.Search,
-                contentDescription = "",
+                contentDescription = "Search categories",
                 modifier = Modifier
                     .padding(15.dp)
                     .size(22.dp)
@@ -258,7 +267,7 @@ fun SearchView(searchState: MutableState<TextFieldValue>) {
                 ) {
                     Icon(
                         Icons.Default.Close,
-                        contentDescription = "",
+                        contentDescription = "Clear search",
                         modifier = Modifier
                             .padding(15.dp)
                             .size(24.dp)
