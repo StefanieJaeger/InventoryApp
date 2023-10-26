@@ -16,12 +16,12 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.ost.mge.inventoryapp.State
+import com.ost.mge.inventoryapp.data.Category
 
 @Composable
     @OptIn(ExperimentalMaterial3Api::class)
     fun CategoriesView(
-    state: State,
+    categories: List<Category>,
     navController: NavHostController
     ) {
     Scaffold(topBar = {
@@ -29,7 +29,7 @@ import com.ost.mge.inventoryapp.State
     })  { padding ->
             Box(modifier = Modifier.padding(padding)) {
                 LazyColumn {
-                    items(state.categories) { category ->
+                    items(categories) { category ->
                         Button(onClick = { navController.navigate("categories/${category.id}/items") }) {
                             Text(category.name)
                         }

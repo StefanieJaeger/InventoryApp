@@ -22,30 +22,38 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         mainViewModel.createTestData()
         setContent {
-            val state by mainViewModel.state.collectAsState()
+            val categories by mainViewModel.categoriesFlow.collectAsState()
 //            InventoryAppTheme {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "categories") {
                 composable("categories") {
-                    CategoriesView(state = state, navController = navController)
+                    CategoriesView(categories = categories, navController = navController)
                 }
                 composable("categories/{categoryId}/items") { backStackEntry ->
-                    val category = state.categories.find { c -> c.id == backStackEntry.arguments?.getString("categoryId") }
-                    if(category === null) {
+                    val category =
+                        categories.find { c -> c.id == backStackEntry.arguments?.getString("categoryId") }
+                    if (category === null) {
                         throw Exception("category not found")
                     }
                     ItemsView(navController = navController, category = category)
                 }
                 composable("categories/{categoryId}/items/{itemId}") { backStackEntry ->
-                    val category = state.categories.find { c -> c.id == backStackEntry.arguments?.getString("categoryId") }
-                    if(category === null) {
+                    val category =
+                        categories.find { c -> c.id == backStackEntry.arguments?.getString("categoryId") }
+                    if (category === null) {
                         throw Exception("category not found")
                     }
-                    val item = category.items.find { i -> i.id == backStackEntry.arguments?.getString("itemId")}
-                    if(item === null) {
+                    val item =
+                        category.items.find { i -> i.id == backStackEntry.arguments?.getString("itemId") }
+                    if (item === null) {
                         throw Exception("item not found")
                     }
-                    ItemView(navController = navController, item = item)
+                    ItemView(navController = navController, item ,{ item ->
+                        mainViewModel.updateItem(
+                            category,
+                            item
+                        )
+                    })
                 }
             }
 //            }

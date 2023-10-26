@@ -1,23 +1,54 @@
 package com.ost.mge.inventoryapp
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ost.mge.inventoryapp.data.Category
 import com.ost.mge.inventoryapp.data.Item
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class State(val categories: List<Category>)
-
 class MainViewModel : ViewModel() {
-    var state = MutableStateFlow(State(emptyList()))
+    var categories = mutableStateListOf<Category>()
+    var _categoriesFlow = MutableStateFlow(categories)
+
+    val categoriesFlow: StateFlow<List<Category>> get() = _categoriesFlow
 
     fun createTestData() {
         viewModelScope.launch {
-            state.emit(State(listOf(
-                Category("1", "Category 1", listOf(Item("1", "Item 1.1", "This is item 1.1"), Item("2", "Item 1.2", "This is item 1.2"))),
-                Category("2", "Category 2", listOf(Item("1", "Item 2.1", "This is item 2.1"))),
-                )))
+            categories.addAll(
+                listOf(
+                    Category(
+                        "1",
+                        "Category 1",
+                        listOf(
+                            Item("1", "Item 1.1", "This is item 1.1"),
+                            Item("2", "Item 1.2", "This is item 1.2")
+                        )
+                    ),
+                    Category(
+                        "2",
+                        "Category 2",
+                        listOf(Item("1", "Item 2.1", "This is item 2.1"))
+                    ),
+                )
+            )
         }
     }
+
+    fun updateItem(category: Category, item: Item) {
+        val categoryIndex = categories.indexOf(category);
+        val category = categories[categoryIndex]
+        val itemIndex = category.items.indexOf(item);
+        val updatedNestedList = category.items.toMutableList()
+
+        updatedNestedList[itemIndex] = item // Replace the item in the nested list
+        category.items = updatedNestedList // Update the nested list in the outer item
+
+        // Notify the StateFlow of the change
+        _categoriesFlow.value = categories;
+    }
+
 }
