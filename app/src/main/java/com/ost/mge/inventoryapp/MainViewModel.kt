@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 data class State(val categories: List<Category>)
 
 class MainViewModel : ViewModel() {
-    val state = MutableStateFlow(State(emptyList()))
+    var state = MutableStateFlow(State(emptyList()))
 
     fun createTestData() {
         viewModelScope.launch {
