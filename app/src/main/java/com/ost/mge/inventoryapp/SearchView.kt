@@ -26,7 +26,7 @@ fun SearchView(searchText: MutableState<String>, getSuggestions: (String) -> Lis
     SearchBar(
         modifier = Modifier.fillMaxWidth(),
         query = searchText.value,
-        onQueryChange = {searchText.value = it},
+        onQueryChange = { searchText.value = it },
         onSearch = { active = false },
         active = active,
         onActiveChange = {
@@ -43,14 +43,12 @@ fun SearchView(searchText: MutableState<String>, getSuggestions: (String) -> Lis
             contentDescription = null)
        },
     ) {
-        val suggestions = getSuggestions(searchText.value)
-        repeat(suggestions.size) { idx ->
-            val text = suggestions[idx]
+        for (suggestion in getSuggestions(searchText.value)) {
             ListItem(
-                headlineContent = { Text(text) },
+                headlineContent = { Text(suggestion) },
                 modifier = Modifier
                     .clickable {
-                        searchText.value = text
+                        searchText.value = suggestion
                         active = false
                     }
                     .fillMaxWidth()
