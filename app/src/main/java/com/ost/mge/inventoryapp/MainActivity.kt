@@ -27,7 +27,11 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "categories") {
                 composable("categories") {
-                    CategoriesView(categories = categories, navController = navController)
+                    CategoriesView(
+                        categories = categories,
+                        navController = navController,
+                        onEditCategory = {category -> mainViewModel.updateCategory(category)},
+                        onDeleteCategory = {category -> mainViewModel.removeCategory(category)})
                 }
                 composable("categories/{categoryId}/items") { backStackEntry ->
                     val category =
@@ -48,12 +52,12 @@ class MainActivity : ComponentActivity() {
                     if (item === null) {
                         throw Exception("item not found")
                     }
-                    ItemView(navController = navController, item ,{ item ->
+                    ItemView(navController = navController, item) {
                         mainViewModel.updateItem(
                             category,
-                            item
+                            it
                         )
-                    })
+                    }
                 }
             }
 //            }
