@@ -1,8 +1,10 @@
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
@@ -22,7 +24,7 @@ fun SearchView(searchText: MutableState<String>, getSuggestions: (String) -> Lis
     var active by rememberSaveable { mutableStateOf(false) }
 
     SearchBar(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxWidth(),
         query = searchText.value,
         onQueryChange = {searchText.value = it},
         onSearch = { active = false },
@@ -32,7 +34,14 @@ fun SearchView(searchText: MutableState<String>, getSuggestions: (String) -> Lis
         },
         placeholder = { Text("Search the list") },
         leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-        trailingIcon = { Icon(Icons.Default.MoreVert, contentDescription = null) },
+        trailingIcon = {
+            Icon(Icons.Default.Close,
+            modifier = Modifier.clickable(onClick = {
+                active = false
+                searchText.value = ""
+            }),
+            contentDescription = null)
+       },
     ) {
         val suggestions = getSuggestions(searchText.value)
         repeat(suggestions.size) { idx ->
