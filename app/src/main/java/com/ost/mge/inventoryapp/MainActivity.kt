@@ -29,6 +29,7 @@ class MainActivity : ComponentActivity() {
         mainViewModel.createTestData()
         setContent {
             val categories by mainViewModel.categoriesFlow.collectAsState()
+            val items by mainViewModel.itemsFlow.collectAsState()
             InventoryAppTheme {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "categories") {
@@ -44,11 +45,12 @@ class MainActivity : ComponentActivity() {
                     composable("categories/{categoryId}/items") { backStackEntry ->
                         val categoryId =
                             backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: 0
-                        val category =
-                            categories.first { c -> c.id == categoryId }
+                        val category = categories.first { it.id == categoryId }
+                        val itemsForCategory = items.filter { it.categoryId == categoryId }
                         ItemsView(
                             navController = navController,
                             category = category,
+                            items = itemsForCategory,
                             onDeleteItem = mainViewModel::removeItem,
                             onAddItem = mainViewModel::addItemWithDefaultName
                         )
@@ -56,14 +58,12 @@ class MainActivity : ComponentActivity() {
                     composable("categories/{categoryId}/items/{itemId}") { backStackEntry ->
                         val categoryId =
                             backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: 0
-                        val itemId = backStackEntry.arguments?.getString("itemId")?.toIntOrNull() ?: 0
-                        val category =
-                            categories.first { c -> c.id == categoryId }
-                        val item =
-                            category.items.first { i -> i.id == itemId }
+                        val itemId =
+                            backStackEntry.arguments?.getString("itemId")?.toIntOrNull() ?: 0
+                        val item = items.first { it.id == itemId && it.categoryId == categoryId }
+
                         ItemView(navController = navController, item) {
                             mainViewModel.updateItem(
-                                category.id,
                                 it
                             )
                         }

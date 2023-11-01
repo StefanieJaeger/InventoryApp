@@ -43,15 +43,16 @@ import com.ost.mge.inventoryapp.spaceHalf
 @OptIn(ExperimentalMaterial3Api::class)
 fun ItemsView(
     category: Category,
+    items: List<Item>,
     navController: NavHostController,
-    onDeleteItem: (Int, Int) -> Unit,
+    onDeleteItem: (Int) -> Unit,
     onAddItem: (Int) -> Unit,
 ) {
     val searchText = remember { mutableStateOf("") }
-    var filteredCategories = category.items
+    var filteredCategories = items
     if (searchText.value.isNotEmpty()) {
         filteredCategories =
-            category.items.filter { it.name.contains(searchText.value, ignoreCase = true) }
+            items.filter { it.name.contains(searchText.value, ignoreCase = true) }
     }
 
     Scaffold(topBar = {
@@ -71,7 +72,7 @@ fun ItemsView(
             Modifier.padding(padding)
         ) {
             SearchView(searchText) { text ->
-                category.items.map(Item::name).filter { it.contains(text, ignoreCase = true) }
+                items.map(Item::name).filter { it.contains(text, ignoreCase = true) }
             }
             LazyColumn(
                 contentPadding = PaddingValues(spaceHalf),
@@ -94,7 +95,7 @@ fun ItemsView(
 fun DraggableItemListItem(
     categoryId: Int,
     item: Item,
-    onDeleteItem: (Int, Int) -> Unit,
+    onDeleteItem: (Int) -> Unit,
     onItemClick: () -> Unit,
 ) {
     Row(
@@ -103,7 +104,7 @@ fun DraggableItemListItem(
             .clip(RoundedCornerShape(spaceHalf))
     ) {
         DraggableItem(
-            onDelete = { onDeleteItem(categoryId, item.id) },
+            onDelete = { onDeleteItem(item.id) },
             dragEnabled = true
         ) {
             Box(
