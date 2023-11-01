@@ -46,4 +46,17 @@ class MainViewModel : ViewModel() {
         _categoriesFlow.value = categories;
     }
 
+    fun updateCategory(category: Category) {
+        val categoryIndex = categories.indexOf(category)
+
+        categories[categoryIndex] = category
+
+        _categoriesFlow.value = categories
+    }
+
+    fun removeCategory(category: Category) {
+        categories.remove(category)
+
+        _categoriesFlow.value = categories
+    }
 }
