@@ -20,11 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
-val space = 16.dp
-val spaceHalf = 8.dp
-val spaceQuarter = 4.dp
-val spaceOneAndQuarter = 20.dp
-
 @Composable
 fun EditAction(modifier: Modifier, action: () -> Unit) {
     BaseAction(modifier, action, MaterialTheme.colorScheme.tertiary, Icons.Default.Edit, "Edit")

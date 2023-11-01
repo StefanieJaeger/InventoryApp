@@ -36,15 +36,13 @@ import androidx.navigation.NavHostController
 import com.ost.mge.inventoryapp.DraggableItem
 import com.ost.mge.inventoryapp.InlineTextField
 import com.ost.mge.inventoryapp.data.Category
+import com.ost.mge.inventoryapp.space
+import com.ost.mge.inventoryapp.spaceHalf
 
 // draggable/swipe-able item: https://github.com/cp-radhika-s/swipe-to-action-blog-demo/
 enum class DragAnchors {
     Start, End,
 }
-
-val space = 16.dp
-val spaceHalf = 8.dp
-val listItemHeight = 80.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,7 +50,7 @@ fun CategoriesView(
     categories: List<Category>,
     navController: NavHostController,
     onEditCategory: (Category) -> Unit,
-    onDeleteCategory: (Category) -> Unit,
+    onDeleteCategory: (Int) -> Unit,
     onAddCategory: () -> Unit,
 ) {
     val searchText = remember { mutableStateOf("") }
@@ -105,7 +103,7 @@ fun DraggableCategoryListItem(
     category: Category,
     onCategoryClick: (Category) -> Unit,
     onEditCategory: (Category) -> Unit,
-    onDeleteCategory: (Category) -> Unit,
+    onDeleteCategory: (Int) -> Unit,
     categoryIdBeingEdited: MutableState<Int?>
 ) {
     val editMode = categoryIdBeingEdited.value == category.id
@@ -116,8 +114,8 @@ fun DraggableCategoryListItem(
     ) {
         DraggableItem(
             onEdit = { categoryIdBeingEdited.value = category.id },
-            onDelete = { onDeleteCategory(category) },
-            !editMode
+            onDelete = { onDeleteCategory(category.id) },
+            dragEnabled = !editMode
         ) {
             Box(
                 modifier = Modifier

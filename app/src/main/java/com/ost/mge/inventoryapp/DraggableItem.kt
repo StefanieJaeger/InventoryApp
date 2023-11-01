@@ -23,20 +23,20 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import com.ost.mge.inventoryapp.categories.DragAnchors
-import com.ost.mge.inventoryapp.categories.listItemHeight
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DraggableItem(
-    onEdit: () -> Unit,
+    onEdit: (() -> Unit)? = null,
     onDelete: () -> Unit,
     dragEnabled: Boolean,
     content: @Composable BoxScope.() -> Unit
 ) {
     val density = LocalDensity.current
-    val actionsSizePx = with(density) { (listItemHeight * 2).toPx() }
+    val totalButtonsWidth = if (onEdit != null) listItemHeight * 2 else listItemHeight
+    val actionsSizePx = with(density) { totalButtonsWidth.toPx() }
 
     val draggableState = remember {
         AnchoredDraggableState(
@@ -57,7 +57,9 @@ fun DraggableItem(
         coroutineScope.launch {
             resetAnchoredDraggableState(draggableState)
         }
-        onEdit()
+        if(onEdit != null) {
+            onEdit()
+        }
     }
 
     val deleteAction = {
@@ -76,17 +78,19 @@ fun DraggableItem(
             Modifier.align(Alignment.CenterEnd),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            EditAction(
-                Modifier
-                    .width(listItemHeight)
-                    .height(listItemHeight),
-                editAction
-            )
+            if(onEdit != null) {
+                EditAction(
+                    modifier = Modifier
+                        .width(listItemHeight)
+                        .height(listItemHeight),
+                    action = editAction
+                )
+            }
             DeleteAction(
-                Modifier
+                modifier = Modifier
                     .width(listItemHeight)
                     .height(listItemHeight),
-                deleteAction
+                action = deleteAction
             )
         }
 
