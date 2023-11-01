@@ -68,14 +68,12 @@ class MainViewModel : ViewModel() {
         val updatedNestedList = category.items.toMutableList()
         updatedNestedList.add(Item(newId, "Default", "Default"))
 
+        category.items = updatedNestedList
+
         updateCategory(category)
     }
 
     fun updateCategory(category: Category) {
-//        val categoryIndex = _categories.indexOf(category)
-//
-//        _categories[categoryIndex] = category
-
         _categories.replaceAll {if (it.id == category.id) category else it}
 
         _categoriesFlow.value = _categories

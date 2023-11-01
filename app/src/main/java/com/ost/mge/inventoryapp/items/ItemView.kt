@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.ost.mge.inventoryapp.data.Category
 import com.ost.mge.inventoryapp.data.Item
 
 @Composable
@@ -36,7 +35,7 @@ fun ItemView(
                 navigationIcon = {
                     IconButton(onClick = navController::navigateUp)
                     {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "back")
+                        Icon(Icons.AutoMirrored.Default.ArrowBack, "back")
                     }
                 }
             )
