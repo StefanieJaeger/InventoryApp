@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.gestures.snapTo
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -29,10 +30,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,6 +47,7 @@ import com.ost.mge.inventoryapp.DeleteAction
 import com.ost.mge.inventoryapp.EditAction
 import com.ost.mge.inventoryapp.InlineTextField
 import com.ost.mge.inventoryapp.data.Category
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 // draggable/swipe-able item: https://github.com/cp-radhika-s/swipe-to-action-blog-demo/
@@ -67,6 +69,7 @@ enum class DragAnchors {
     if(searchText.value.isNotEmpty()) {
         filteredCategories = categories.filter {it.name.contains(searchText.value, ignoreCase = true)}
     }
+    val categoryIdBeingEdited = remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -78,7 +81,8 @@ enum class DragAnchors {
             }
         }
         )  { padding ->
-        Column(Modifier.padding(padding)) {
+        Column(Modifier.padding(padding).clickable { categoryIdBeingEdited.value = "" })
+        {
             SearchView(searchText) { text ->
                 categories.filter {
                     it.name.contains(
@@ -93,7 +97,8 @@ enum class DragAnchors {
                         category,
                         onCategoryClick = {navController.navigate("categories/${category.id}/items")},
                         onEditCategory,
-                        onDeleteCategory
+                        onDeleteCategory,
+                        categoryIdBeingEdited,
                     )
                 }
             }
@@ -102,15 +107,22 @@ enum class DragAnchors {
 }
 
 @Composable
-fun DraggableCategoryListItem(category: Category, onCategoryClick: (Category) -> Unit, onEditCategory: (Category) -> Unit, onDeleteCategory: (Category) -> Unit) {
-    var editMode by remember {
-        mutableStateOf(false)
-    }
-    // todo: reset swipe on edit or delete
-    Row(Modifier.clickable(onClick = { onCategoryClick(category) })) {
-        DraggableItem (onEdit = {editMode = true}, onDelete = {onDeleteCategory(category)}) {
+fun DraggableCategoryListItem(
+    category: Category,
+    onCategoryClick: (Category) -> Unit,
+    onEditCategory: (Category) -> Unit,
+    onDeleteCategory: (Category) -> Unit,
+    categoryIdBeingEdited: MutableState<String>
+    ) {
+    val editMode = categoryIdBeingEdited.value === category.id
+    Row {
+        DraggableItem (
+            onEdit = {categoryIdBeingEdited.value = category.id},
+            onDelete = {onDeleteCategory(category)},
+            !editMode) {
             Box(
                 Modifier
+                    .clickable(onClick = { if (!editMode) onCategoryClick(category) })
                     // todo: use our themed color
                     .background(Color.Green)
                     .fillMaxSize(),
@@ -118,7 +130,7 @@ fun DraggableCategoryListItem(category: Category, onCategoryClick: (Category) ->
             ) {
                 // todo: style list item nicely
                 if(editMode) {
-                    InlineTextField(category.name, onDone = {category.name = it; onEditCategory(category); editMode = false})
+                    InlineTextField(category.name, onDone = {category.name = it; onEditCategory(category); categoryIdBeingEdited.value = ""})
                 } else {
                     Text(category.name)
                 }
@@ -130,7 +142,10 @@ fun DraggableCategoryListItem(category: Category, onCategoryClick: (Category) ->
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DraggableItem(
-    onEdit: () -> Unit, onDelete: () -> Unit, content: @Composable BoxScope.() -> Unit
+    onEdit: () -> Unit,
+    onDelete: () -> Unit,
+    dragEnabled: Boolean,
+    content: @Composable BoxScope.() -> Unit
 ) {
     val density = LocalDensity.current
     val defaultActionSize = 80.dp
@@ -149,16 +164,24 @@ fun DraggableItem(
         )
     }
 
+    val coroutineScope = rememberCoroutineScope()
+
     val editAction = {
-        // todo: reset drag!
+        coroutineScope.launch {
+            resetAnchoredDraggableState(draggableState)
+        }
         onEdit()
     }
 
     val deleteAction = {
-        // todo: reset drag!
+        coroutineScope.launch {
+            resetAnchoredDraggableState(draggableState)
+        }
         onDelete()
     }
 
+    // todo: style list item, then decide how to style these buttons
+    // todo: also, move this to own file
     Box(
         modifier = Modifier
             .padding(16.dp)
@@ -192,8 +215,17 @@ fun DraggableItem(
                         y = 0,
                     )
                 }
-                .anchoredDraggable(draggableState, Orientation.Horizontal, reverseDirection = true),
+                .anchoredDraggable(
+                    draggableState,
+                    Orientation.Horizontal,
+                    reverseDirection = true,
+                    enabled = dragEnabled),
             content = content
         )
     }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+suspend fun resetAnchoredDraggableState(anchoredDraggableState: AnchoredDraggableState<DragAnchors>) {
+    anchoredDraggableState.snapTo(DragAnchors.Start)
 }
