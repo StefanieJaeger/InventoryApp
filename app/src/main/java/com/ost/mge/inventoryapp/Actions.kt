@@ -37,7 +37,13 @@ fun DeleteAction(modifier: Modifier, action: () -> Unit) {
 }
 
 @Composable
-private fun BaseAction(modifier: Modifier, action: () -> Unit, backgroundColor: Color, icon: ImageVector, text: String) {
+private fun BaseAction(
+    modifier: Modifier,
+    action: () -> Unit,
+    backgroundColor: Color,
+    icon: ImageVector,
+    text: String
+) {
     Box(
         modifier = modifier
             .background(backgroundColor)

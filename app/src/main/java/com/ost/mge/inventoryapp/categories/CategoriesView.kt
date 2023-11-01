@@ -39,8 +39,7 @@ import com.ost.mge.inventoryapp.data.Category
 
 // draggable/swipe-able item: https://github.com/cp-radhika-s/swipe-to-action-blog-demo/
 enum class DragAnchors {
-    Start,
-    End,
+    Start, End,
 }
 
 val space = 16.dp
@@ -64,48 +63,40 @@ fun CategoriesView(
     }
     val categoryIdBeingEdited = remember { mutableStateOf(null as Int?) }
 
-        Scaffold(
-            topBar = {
-                TopAppBar(title = { Text(text = "Categories") })
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    onClick = onAddCategory,
-                    containerColor = MaterialTheme.colorScheme.secondary
-                ) {
-                    Icon(Icons.Filled.Add, "Add a category")
+    Scaffold(topBar = {
+        TopAppBar(title = { Text(text = "Categories") })
+    }, floatingActionButton = {
+        FloatingActionButton(
+            onClick = onAddCategory, containerColor = MaterialTheme.colorScheme.secondary
+        ) {
+            Icon(Icons.Filled.Add, "Add a category")
+        }
+    }) { padding ->
+        Column(
+            Modifier
+                .padding(padding)
+                .clickable(indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = { categoryIdBeingEdited.value = null }),
+        ) {
+            SearchView(searchText) { text ->
+                categories.map(Category::name).filter { it.contains(text, ignoreCase = true) }
+            }
+            LazyColumn(
+                contentPadding = PaddingValues(spaceHalf),
+                verticalArrangement = Arrangement.spacedBy(spaceHalf)
+            ) {
+                items(filteredCategories) { category ->
+                    DraggableCategoryListItem(
+                        category,
+                        onCategoryClick = { navController.navigate("categories/${category.id}/items") },
+                        onEditCategory,
+                        onDeleteCategory,
+                        categoryIdBeingEdited,
+                    )
                 }
             }
-        ) { padding ->
-            Column(
-                Modifier
-                    .padding(padding)
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() },
-                        onClick = { categoryIdBeingEdited.value = null }),
-                )
-            {
-                SearchView(searchText) { text ->
-                    categories
-                        .map(Category::name)
-                        .filter { it.contains(text, ignoreCase = true) }
-                }
-                LazyColumn(
-                    contentPadding = PaddingValues(spaceHalf),
-                    verticalArrangement = Arrangement.spacedBy(spaceHalf)
-                ) {
-                    items(filteredCategories) { category ->
-                        DraggableCategoryListItem(
-                            category,
-                            onCategoryClick = { navController.navigate("categories/${category.id}/items") },
-                            onEditCategory,
-                            onDeleteCategory,
-                            categoryIdBeingEdited,
-                        )
-                    }
-                }
-            }
+        }
     }
 }
 
@@ -118,9 +109,10 @@ fun DraggableCategoryListItem(
     categoryIdBeingEdited: MutableState<Int?>
 ) {
     val editMode = categoryIdBeingEdited.value == category.id
-    Row (modifier = Modifier
-        .background(color = Color.Transparent)
-        .clip(RoundedCornerShape(spaceHalf))
+    Row(
+        modifier = Modifier
+            .background(color = Color.Transparent)
+            .clip(RoundedCornerShape(spaceHalf))
     ) {
         DraggableItem(
             onEdit = { categoryIdBeingEdited.value = category.id },
@@ -129,7 +121,13 @@ fun DraggableCategoryListItem(
         ) {
             Box(
                 modifier = Modifier
-                    .run { if (!editMode) clickable(onClick = { onCategoryClick(category) }) else this }
+                    .run {
+                        if (!editMode) clickable(onClick = {
+                            onCategoryClick(
+                                category
+                            )
+                        }) else this
+                    }
                     .background(
                         color = MaterialTheme.colorScheme.primaryContainer,
                     )
@@ -138,13 +136,11 @@ fun DraggableCategoryListItem(
                 contentAlignment = Alignment.CenterStart,
             ) {
                 if (editMode) {
-                    InlineTextField(
-                        category.name,
-                        onDone = {
-                            category.name = it
-                            onEditCategory(category)
-                            categoryIdBeingEdited.value = null
-                        })
+                    InlineTextField(category.name, onDone = {
+                        category.name = it
+                        onEditCategory(category)
+                        categoryIdBeingEdited.value = null
+                    })
                 } else {
                     Text(category.name)
                 }

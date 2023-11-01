@@ -24,37 +24,40 @@ class MainActivity : ComponentActivity() {
         setContent {
             val categories by mainViewModel.categoriesFlow.collectAsState()
             InventoryAppTheme {
-            val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "categories") {
-                composable("categories") {
-                    CategoriesView(
-                        categories = categories,
-                        navController = navController,
-                        onEditCategory = mainViewModel::updateCategory,
-                        onDeleteCategory = mainViewModel::removeCategory,
-                        onAddCategory = mainViewModel::addCategoryWithDefaultName)
-                }
-                composable("categories/{categoryId}/items") { backStackEntry ->
-                    val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: 0
-                    val category =
-                        categories.first { c -> c.id ==  categoryId}
-                    ItemsView(navController = navController, category = category)
-                }
-                composable("categories/{categoryId}/items/{itemId}") { backStackEntry ->
-                    val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: 0
-                    val itemId = backStackEntry.arguments?.getString("itemId")
-                    val category =
-                        categories.first { c -> c.id ==  categoryId}
-                    val item =
-                        category.items.first { i -> i.id == itemId }
-                    ItemView(navController = navController, item) {
-                        mainViewModel.updateItem(
-                            category,
-                            it
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "categories") {
+                    composable("categories") {
+                        CategoriesView(
+                            categories = categories,
+                            navController = navController,
+                            onEditCategory = mainViewModel::updateCategory,
+                            onDeleteCategory = mainViewModel::removeCategory,
+                            onAddCategory = mainViewModel::addCategoryWithDefaultName
                         )
                     }
+                    composable("categories/{categoryId}/items") { backStackEntry ->
+                        val categoryId =
+                            backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: 0
+                        val category =
+                            categories.first { c -> c.id == categoryId }
+                        ItemsView(navController = navController, category = category)
+                    }
+                    composable("categories/{categoryId}/items/{itemId}") { backStackEntry ->
+                        val categoryId =
+                            backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: 0
+                        val itemId = backStackEntry.arguments?.getString("itemId")
+                        val category =
+                            categories.first { c -> c.id == categoryId }
+                        val item =
+                            category.items.first { i -> i.id == itemId }
+                        ItemView(navController = navController, item) {
+                            mainViewModel.updateItem(
+                                category,
+                                it
+                            )
+                        }
+                    }
                 }
-            }
             }
         }
     }

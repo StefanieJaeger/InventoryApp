@@ -24,7 +24,14 @@ class MainViewModel : ViewModel() {
         viewModelScope.launch {
             _categories.addAll(
                 listOf(
-                    Category(1, "Category 1", listOf(Item("1", "Item 1.1", "This is item 1.1"), Item("2", "Item 1.2", "This is item 1.2"))),
+                    Category(
+                        1,
+                        "Category 1",
+                        listOf(
+                            Item("1", "Item 1.1", "This is item 1.1"),
+                            Item("2", "Item 1.2", "This is item 1.2")
+                        )
+                    ),
                     Category(2, "Category 2", listOf(Item("1", "Item 2.1", "This is item 2.1"))),
                     Category(3, "Category 3", listOf(Item("1", "Item 3.1", "This is item 3.1"))),
                     Category(4, "Category 4", listOf(Item("1", "Item 4.1", "This is item 4.1"))),
@@ -47,7 +54,7 @@ class MainViewModel : ViewModel() {
         category.items = updatedNestedList // Update the nested list in the outer item
 
         // Notify the StateFlow of the change
-        _categoriesFlow.value = _categories;
+        _categoriesFlow.value = _categories
     }
 
     fun updateCategory(category: Category) {
@@ -68,6 +75,6 @@ class MainViewModel : ViewModel() {
         val newId = (_categories.maxOfOrNull(Category::id) ?: 0) + 1
         _categories.add(Category(newId, "Default", emptyList()))
 
-        _categoriesFlow.value = _categories;
+        _categoriesFlow.value = _categories
     }
 }

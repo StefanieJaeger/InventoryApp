@@ -33,15 +33,17 @@ fun SearchView(searchText: MutableState<String>, getSuggestions: (String) -> Lis
             active = it
         },
         placeholder = { Text("Search the list") },
-        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
         trailingIcon = {
-            Icon(Icons.Default.Close,
-            modifier = Modifier.clickable(onClick = {
-                active = false
-                searchText.value = ""
-            }),
-            contentDescription = null)
-       },
+            Icon(
+                Icons.Default.Close,
+                modifier = Modifier.clickable(onClick = {
+                    active = false
+                    searchText.value = ""
+                }),
+                contentDescription = "Clear search"
+            )
+        },
     ) {
         for (suggestion in getSuggestions(searchText.value)) {
             ListItem(
