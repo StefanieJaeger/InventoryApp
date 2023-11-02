@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider.getUriForFile
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import coil.compose.rememberImagePainter
 import com.ost.mge.inventoryapp.BuildConfig
@@ -58,11 +59,13 @@ fun ItemView(
         BuildConfig.APPLICATION_ID + ".provider", newFile
     )
 
+    val deleteItemImageUri = {
+        imageUri = "".toUri()
+    }
+
     val updateItemImageUri = {
-        if (imageUri === contentUri) {
-            item.imagePath = imageUri
-            onUpdateItem(item)
-        }
+        item.imagePath = imageUri
+        onUpdateItem(item)
     }
 
     val cameraLauncher =
@@ -129,15 +132,27 @@ fun ItemView(
                 contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
                 content = { Text(text = "Add an image") },
             )
+            if (imageUri.path?.isNotEmpty() == true) {
+                Button(
+                    onClick = { deleteItemImageUri() },
+                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                    content = { Text(text = "delete image") },
+                )
+            }
 
             if (imageUri.path?.isNotEmpty() == true) {
                 updateItemImageUri()
-                Image(
-                    modifier = Modifier
-                        .padding(16.dp, 8.dp),
-                    painter = rememberImagePainter(imageUri),
-                    contentDescription = null
-                )
+                Column {
+                    Text(
+                        text=imageUri.toString()
+                    )
+                    Image(
+                        modifier = Modifier
+                            .padding(16.dp, 8.dp),
+                        painter = rememberImagePainter(imageUri),
+                        contentDescription = null
+                    )
+                }
             }
         }
     }
