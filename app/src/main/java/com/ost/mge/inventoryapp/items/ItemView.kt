@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,7 +47,7 @@ import java.util.Objects
 fun ItemView(
     navController: NavController,
     item: Item,
-    onUpdateItem: (item: Item) -> Unit,
+    onUpdateItem: (item: Item) -> Unit
 ) {
     var itemNameField by remember { mutableStateOf(item.name) }
     var itemDescriptionField by remember { mutableStateOf(item.description) }
@@ -89,7 +90,7 @@ fun ItemView(
                 navigationIcon = {
                     IconButton(onClick = navController::navigateUp)
                     {
-                        Icon(Icons.Default.ArrowBack, "back")
+                        Icon(Icons.AutoMirrored.Default.ArrowBack, "back")
                     }
                 }
             )
