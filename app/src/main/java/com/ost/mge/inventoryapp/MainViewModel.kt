@@ -1,6 +1,7 @@
 package com.ost.mge.inventoryapp
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ost.mge.inventoryapp.data.Category
@@ -24,14 +25,14 @@ class MainViewModel : ViewModel() {
                         "1",
                         "Category 1",
                         listOf(
-                            Item("1", "Item 1.1", "This is item 1.1"),
-                            Item("2", "Item 1.2", "This is item 1.2")
+                            Item("1", "Item 1.1", "This is item 1.1", "".toUri()),
+                            Item("2", "Item 1.2", "This is item 1.2", "".toUri())
                         )
                     ),
                     Category(
                         "2",
                         "Category 2",
-                        listOf(Item("1", "Item 2.1", "This is item 2.1"))
+                        listOf(Item("1", "Item 2.1", "This is item 2.1", "".toUri()))
                     ),
                 )
             )

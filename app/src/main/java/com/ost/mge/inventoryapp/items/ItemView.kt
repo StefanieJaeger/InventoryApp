@@ -49,7 +49,7 @@ fun ItemView(
 ) {
     var itemNameField by remember { mutableStateOf(item.name) }
     var itemDescriptionField by remember { mutableStateOf(item.description) }
-    var imageUri by remember { mutableStateOf<Uri>(Uri.EMPTY) } // TODO: add imageuri to item
+    var imageUri by remember { mutableStateOf(item.imagePath) }
 
     val context = LocalContext.current
     val newFile = context.createImageFile()
@@ -57,6 +57,13 @@ fun ItemView(
         Objects.requireNonNull(context),
         BuildConfig.APPLICATION_ID + ".provider", newFile
     )
+
+    val updateItemImageUri = {
+        if (imageUri === contentUri) {
+            item.imagePath = imageUri
+            onUpdateItem(item)
+        }
+    }
 
     val cameraLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
@@ -123,12 +130,8 @@ fun ItemView(
                 content = { Text(text = "Add an image") },
             )
 
-            val uriNotEmpty =
-                "Is new Image Uri present? " + (imageUri.path?.isNotEmpty() == true).toString()
-
-            Text(text = uriNotEmpty)
-
             if (imageUri.path?.isNotEmpty() == true) {
+                updateItemImageUri()
                 Image(
                     modifier = Modifier
                         .padding(16.dp, 8.dp),
