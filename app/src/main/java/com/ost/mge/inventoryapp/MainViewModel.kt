@@ -63,7 +63,7 @@ class MainViewModel : ViewModel() {
 
     fun addItemWithDefaultName(categoryId: Int) {
         val newId = (_items.maxOfOrNull(Item::id) ?: 0) + 1
-        _items.add(Item(newId, "Default", "Default", categoryId))
+        _items.add(Item(newId, "Default", "Default", "".toUri(), categoryId))
 
         _itemsFlow.value = _items
     }
