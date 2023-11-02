@@ -11,7 +11,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -62,6 +61,8 @@ fun ItemView(
 
     val deleteItemImageUri = {
         imageUri = "".toUri()
+        item.imagePath = imageUri
+        onUpdateItem(item)
     }
 
     val updateItemImageUri = {
