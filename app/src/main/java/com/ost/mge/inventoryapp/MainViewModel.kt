@@ -19,14 +19,25 @@ class MainViewModel : ViewModel() {
     val categoriesFlow: StateFlow<List<Category>> get() = _categoriesFlow
     val itemsFlow: StateFlow<List<Item>> get() = _itemsFlow
 
+    fun init(categories: List<Category>, items: List<Item>) {
+        viewModelScope.launch {
+            _categories.addAll(
+                categories
+            )
+            _items.addAll(
+                items
+            )
+        }
+    }
+
     fun updateItem(item: Item) {
-        _items.replaceAll {if (it.id == item.id) item else it}
+        _items.replaceAll { if (it.id == item.id) item else it }
 
         _itemsFlow.value = _items
     }
 
     fun removeItem(itemId: Int) {
-        _items.removeIf{it.id == itemId}
+        _items.removeIf { it.id == itemId }
 
         _itemsFlow.value = _items
     }
@@ -39,13 +50,13 @@ class MainViewModel : ViewModel() {
     }
 
     fun updateCategory(category: Category) {
-        _categories.replaceAll {if (it.id == category.id) category else it}
+        _categories.replaceAll { if (it.id == category.id) category else it }
 
         _categoriesFlow.value = _categories
     }
 
     fun removeCategory(categoryId: Int) {
-        _categories.removeIf{it.id == categoryId}
+        _categories.removeIf { it.id == categoryId }
 
         _categoriesFlow.value = _categories
     }
