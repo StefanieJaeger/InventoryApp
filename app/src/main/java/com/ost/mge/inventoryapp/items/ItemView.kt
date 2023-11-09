@@ -9,14 +9,19 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -26,7 +31,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -51,6 +58,8 @@ fun ItemView(
     var itemNameField by remember { mutableStateOf(item.name) }
     var itemDescriptionField by remember { mutableStateOf(item.description) }
     var imageUri by remember { mutableStateOf(item.imagePath) }
+    var imageButtonText =
+        if (imageUri.path?.isNotEmpty() == true) "Change image" else "Add an image"
 
     val context = LocalContext.current
     val newFile = context.createImageFile()
@@ -95,33 +104,9 @@ fun ItemView(
                     }
                 }
             )
-        }
-    )
-    { innerpadding ->
-        Column {
-            TextField(
-                value = itemNameField,
-                onValueChange = {
-                    itemNameField = it
-                    item.name = itemNameField
-                    onUpdateItem(item)
-                },
-                label = { Text(text = "Name") },
-                placeholder = { Text(text = "Add a name") },
-                modifier = Modifier.padding(innerpadding),
-            )
-            TextField(
-                value = itemDescriptionField,
-                onValueChange = {
-                    itemDescriptionField = it
-                    item.description = itemDescriptionField
-                    onUpdateItem(item)
-                },
-                label = { Text(text = "Description") },
-                placeholder = { Text(text = "Add a description") },
-                modifier = Modifier.padding(innerpadding)
-            )
-            Button(
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
                 onClick = {
                     val permissionCheckResult =
                         ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
@@ -131,26 +116,62 @@ fun ItemView(
                         permissionLauncher.launch(Manifest.permission.CAMERA)
                     }
                 },
-                contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                content = { Text(text = "Add an image") },
+                containerColor = MaterialTheme.colorScheme.secondary,
+                icon = { Icon(Icons.Filled.AddCircle, "Extended floating action button.") },
+                text = { Text(text = imageButtonText) },
+                //contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                //content = { Text(text = "Add an image") },
             )
-            if (imageUri.path?.isNotEmpty() == true) {
-                Button(
-                    onClick = { deleteItemImageUri() },
-                    contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
-                    content = { Text(text = "delete image") },
-                )
-            }
+        }
+    )
+    { innerpadding ->
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+        ) {
+            TextField(
+                value = itemNameField,
+                onValueChange = {
+                    itemNameField = it
+                    item.name = itemNameField
+                    onUpdateItem(item)
+                },
+                label = { Text(text = "Name") },
+                placeholder = { Text(text = "Add a name") },
+                modifier = Modifier
+                    .padding(innerpadding)
+                    .fillMaxWidth()
+            )
+            TextField(
+                value = itemDescriptionField,
+                onValueChange = {
+                    itemDescriptionField = it
+                    item.description = itemDescriptionField
+                    onUpdateItem(item)
+                },
+                minLines = 5,
+                maxLines = 5,
+                label = { Text(text = "Description") },
+                placeholder = { Text(text = "Add a description") },
+                modifier = Modifier
+                    .padding(top = 10.dp, bottom = 10.dp)
+                    .fillMaxWidth()
+            )
 
             if (imageUri.path?.isNotEmpty() == true) {
                 updateItemImageUri()
-                Column {
-                    Text(
-                        text=imageUri.toString()
+                Column(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                    Button(
+                        onClick = { deleteItemImageUri() },
+                        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
+                        content = { Text(text = "delete image") },
+                        modifier= Modifier.align(Alignment.CenterHorizontally)
                     )
                     Image(
                         modifier = Modifier
-                            .padding(16.dp, 8.dp),
+                            .padding(16.dp, 8.dp)
+                            .clip(RoundedCornerShape(16.dp)),
                         painter = rememberImagePainter(imageUri),
                         contentDescription = null
                     )
