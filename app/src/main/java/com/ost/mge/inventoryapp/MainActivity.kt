@@ -26,7 +26,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainViewModel.createTestData()
         setContent {
             val categories by mainViewModel.categoriesFlow.collectAsState()
             val items by mainViewModel.itemsFlow.collectAsState()

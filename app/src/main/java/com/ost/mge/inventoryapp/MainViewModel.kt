@@ -19,36 +19,6 @@ class MainViewModel : ViewModel() {
     val categoriesFlow: StateFlow<List<Category>> get() = _categoriesFlow
     val itemsFlow: StateFlow<List<Item>> get() = _itemsFlow
 
-    fun createTestData() {
-        viewModelScope.launch {
-            _categories.addAll(
-                listOf(
-                    Category(1, "Category 1"),
-                    Category(2, "Category 2"),
-                    Category(3, "Category 3"),
-                    Category(4, "Category 4"),
-                    Category(5, "Category 5"),
-                    Category(6, "Category 6"),
-                    Category(7, "Category 7"),
-                    Category(8, "Category 8"),
-                )
-            )
-            _items.addAll(
-                listOf(
-                    Item(1, "Item 1.1", "This is item 1.1", "".toUri(), 1),
-                    Item(2, "Item 1.2", "This is item 1.2", "".toUri(), 1),
-                    Item(3, "Item 2.1", "This is item 2.1", "".toUri(), 2),
-                    Item(4, "Item 3.1", "This is item 3.1", "".toUri(), 3),
-                    Item(5, "Item 4.1", "This is item 4.1", "".toUri(), 4),
-                    Item(6, "Item 5.1", "This is item 5.1", "".toUri(), 5),
-                    Item(7, "Item 6.1", "This is item 6.1", "".toUri(), 6),
-                    Item(8, "Item 7.1", "This is item 7.1", "".toUri(), 7),
-                    Item(9, "Item 8.1", "This is item 8.1", "".toUri(), 8),
-                )
-            )
-        }
-    }
-
     fun updateItem(item: Item) {
         _items.replaceAll {if (it.id == item.id) item else it}
 
