@@ -26,3 +26,8 @@ We plan to achieve the minimum score with the following features:
 | Erstellung eines App Widgets (Home Screen)                       |1 to 3||
 | Unterstützung einer zusätzlichen Plattform (WearOS, TV, Auto, …) |1 to 5||
 | … ihre eigenen Ideen …                                           |1 to N| X (Create own app icon)                                                                |
+
+| Description | Screenshot |
+| -- | -- |
+| Category Listview | ![category list view](screenshots/Screenshot_InventoryApp_Categories_LightMode.jpg) |
+| Item Listview | ![category list view](screenshots/Screenshot_InventoryApp_ItemList_LightMode.jpg) |
