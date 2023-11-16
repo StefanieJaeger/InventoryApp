@@ -26,3 +26,12 @@ We plan to achieve the minimum score with the following features:
 | Erstellung eines App Widgets (Home Screen)                       |1 to 3||
 | Unterstützung einer zusätzlichen Plattform (WearOS, TV, Auto, …) |1 to 5||
 | … ihre eigenen Ideen …                                           |1 to N| X (Create own app icon)                                                                |
+
+## Screenshots
+||||
+|-|-|-|
+| <img src="screenshots/Screenshot_InventoryApp_Categories_LightMode.jpg" alt="category list view light mode" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_ItemList_LightMode.jpg" alt="item list view light mode" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_ItemDetailPage_LightMode.jpg" alt="item detail view light mode" height="400px" /> |
+| <img src="screenshots/Screenshot_InventoryApp_CategoryOVerview.jpg" alt="category list view dark mode" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_ItemsList.jpg" alt="item list view dark mode" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_ItemDetailPage.jpg" alt="item detail view dark mode" height="400px" /> |
+| <img src="screenshots/Screenshot_InventoryApp_CategoryActions.jpg" alt="category list view CRUD" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_Item_Search.jpg" alt="search with suggestions" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_Item_Search_Filtering.jpg" alt="search with suggestions on input" height="400px" /> |
+| <img src="screenshots/Screenshot_InventoryApp_ItemDetailEditing.jpg" alt="item detail editing" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_Permission controller.jpg" alt="permission controller camera" height="400px" /> | <img src="screenshots/Screenshot_InventoryApp_PermissionDeniedToast.jpg" alt="permission denied toast" height="400px" /> |
+
