@@ -21,11 +21,13 @@ class MainViewModel : ViewModel() {
 
     fun init(categories: List<Category>, items: List<Item>) {
         viewModelScope.launch {
+            _categories.clear()
+            _items.clear()
             _categories.addAll(
-                categories
+                categories.distinctBy { it.id }
             )
             _items.addAll(
-                items
+                items.distinctBy { it.id }
             )
         }
     }
