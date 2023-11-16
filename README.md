@@ -29,5 +29,5 @@ We plan to achieve the minimum score with the following features:
 
 | Description | Screenshot |
 | -- | -- |
-| Category Listview | ![category list view](screenshots/Screenshot_InventoryApp_Categories_LightMode.jpg) |
+| Category Listview | <img src="screenshots/Screenshot_InventoryApp_Categories_LightMode.jpg" alt="category list view light mode" height="200px" /> |
 | Item Listview | ![category list view](screenshots/Screenshot_InventoryApp_ItemList_LightMode.jpg) |
